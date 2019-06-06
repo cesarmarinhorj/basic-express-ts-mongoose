@@ -1,15 +1,4 @@
-import app from './app'
-import * as path from 'path';
+import {app} from './app'
 
 const port = process.env.PORT || 3100
-
-app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, '../views'));
-
-app.listen(port, (err) => {
-  if (err) {
-    return console.log(err)
-  }
-
-  return console.log(`server is listening on ${port}`)
-});
+app.listen(port, (err) => err ? console.log(err) : console.log(`server is listening on ${port}`));

@@ -1,4 +1,6 @@
+import * as path from 'path';
 import * as express from 'express'
+import * as bodyparser from 'body-parser';
 import {models} from './data/dao';
 
 class App {
@@ -6,7 +8,16 @@ class App {
 
   constructor () {
     this.express = express();
+    this.configure(); // precisa configurar antes de definir as rotas
     this.mountRoutes();
+  }
+
+  private configure()
+  {
+    this.express.use(bodyparser.urlencoded({extended: false}));
+    this.express.use(bodyparser.json());
+    this.express.set('view engine', 'pug');
+    this.express.set('views', path.join(__dirname, '../views'));    
   }
 
   private mountRoutes (): void {
@@ -19,10 +30,6 @@ class App {
       });
     });
 
-    router.get('/blogs', (req, res) => {
-      res.json({});
-    });
-
     router.get('/blogs/new', (req, res) => {
       let blog = new models.blog({title: 'teste'});
       blog.save(function (err) {
@@ -31,17 +38,27 @@ class App {
       res.json(blog);
     });
 
-    router.post('/blogs', function(req, res, next) { 
+
+    router.get('/blogs', (req, res) => {
+      res.render('blog_form', {title: 'Blog Form'});
+    });
+
+    router.post('/blogs', function(req, res, next) {
       if(req.body)
       {
         console.log(req.body);
         let _post = {
-          title: req.body.title
+          _id: null, // precisa ter o _id
+          title: req.body.title,
+          author: req.body.author,
+          body: req.body.body
         };
         let blog = new models.blog(_post);
-        blog.save();       
-        res.redirect('/hello');  
+        blog.save();
+      }else{
+        console.log('unbodyed req')
       }
+      res.redirect('/hello');  
      });
     
     router.get('/blogs/teste', (req, res) => {
@@ -63,4 +80,6 @@ class App {
   }
 }
 
-export default new App().express;
+
+// config
+export const app = new App().express;

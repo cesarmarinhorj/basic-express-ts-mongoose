@@ -52,14 +52,15 @@ class App {
             }
             res.redirect('/hello');
         });
-        router.get('/blogs/teste', (req, res) => {
+        router.get('/blogs/find/title/:title', (req, res) => {
+            console.log(req.params);
             dao_1.models.blog
-                .findOne({ title: 'teste' }, function (error, _blog) {
+                .findOne({ title: req.params.title }, function (error, _res) {
                 if (error) {
                     return error;
                 }
-                console.log(_blog);
-                res.json(_blog);
+                console.log(_res);
+                res.json(_res);
             });
         });
         this.express.use('/', router);

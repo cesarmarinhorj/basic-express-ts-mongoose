@@ -7,7 +7,7 @@ const dao_1 = require("./data/dao");
 class App {
     constructor() {
         this.express = express();
-        this.configure();
+        this.configure(); // precisa configurar antes de definir as rotas
         this.mountRoutes();
     }
     configure() {
@@ -36,7 +36,6 @@ class App {
             res.render('blog_form', { title: 'Blog Form' });
         });
         router.post('/blogs', function (req, res, next) {
-            console.log(req.body);
             if (req.body) {
                 console.log(req.body);
                 let _post = {
@@ -54,44 +53,17 @@ class App {
             res.redirect('/hello');
         });
         router.get('/blogs/teste', (req, res) => {
-            let _res = {};
             dao_1.models.blog
                 .findOne({ title: 'teste' }, function (error, _blog) {
                 if (error) {
                     return error;
                 }
                 console.log(_blog);
-                _res = _blog;
+                res.json(_blog);
             });
-            res.json(_res);
         });
         this.express.use('/', router);
     }
 }
-// config
-exports.app = new App().express;
-// app.use(bodyparser.urlencoded({extended: false}));
-// app.use(bodyparser.json());
-// app.set('view engine', 'pug');
-// app.set('views', path.join(__dirname, '../views'));
-/*
-app.post('/blogs', function(req, res, next) {
-  console.log(req.body);
-  if(req.body)
-  {
-    console.log(req.body);
-    let _post = {
-      _id: null, // precisa ter o _id
-      title: req.body.title,
-      author: req.body.author,
-      body: req.body.body
-    };
-    let blog = new models.blog(_post);
-    blog.save();
-  }else{
-    console.log('unbodyed req')
-  }
-  res.redirect('/hello');
- });
-*/ 
+exports.App = App;
 //# sourceMappingURL=app.js.map

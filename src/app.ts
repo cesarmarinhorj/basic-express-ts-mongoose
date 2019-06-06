@@ -3,7 +3,7 @@ import * as express from 'express'
 import * as bodyparser from 'body-parser';
 import {models} from './data/dao';
 
-class App {
+export class App {
   public express
 
   constructor () {
@@ -12,8 +12,7 @@ class App {
     this.mountRoutes();
   }
 
-  private configure()
-  {
+  private configure() {
     this.express.use(bodyparser.urlencoded({extended: false}));
     this.express.use(bodyparser.json());
     this.express.set('view engine', 'pug');
@@ -62,24 +61,16 @@ class App {
      });
     
     router.get('/blogs/teste', (req, res) => {
-      let _res = {};
-
       models.blog
         .findOne({ title: 'teste' }, function(error, _blog) {
           if (error) {
             return error;
           }
           console.log(_blog);
-          _res = _blog;
+          res.json(_blog);
         });
-
-      res.json(_res);
     });
 
     this.express.use('/', router);
   }
 }
-
-
-// config
-export const app = new App().express;

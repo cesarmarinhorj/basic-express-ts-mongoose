@@ -38,3 +38,33 @@ Basic start repository with express, typescript and mongoose
 ## Erros
 
 - dotenv não funcionando ainda
+
+## Testes
+
+```typescript
+interface Person {
+    name: string;
+    age: number;
+}
+type PersonPartial = Partial<Person>;
+
+class Pessoa implements Person { 
+        name: string;
+};
+class Povao implements PersonPartial { 
+    age: number;
+};
+
+let joao = new Pessoa();
+joao.name = "Joao";
+console.log(joao);
+console.log("name" in joao);
+console.log("age" in joao);
+
+let maria = new Povao();
+maria.age = 32;
+console.log(maria);
+console.log("name" in maria);
+console.log("age" in maria);
+
+```

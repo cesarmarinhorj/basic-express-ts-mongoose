@@ -23,6 +23,7 @@ export class App {
     const router = express.Router();
 
     router.get('/hello', (req, res) => {
+      console.log(req.body);
       res.render('index', {
         title: 'View Test',
         message: 'Hello World!'
